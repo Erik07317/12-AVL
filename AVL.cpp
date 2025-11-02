@@ -141,25 +141,31 @@ int fatorBalanceamento(NO* no) {
 }
 
 NO* girarDireita(NO* y) {  
-   /* Rotação simples à direita  
-             y                x  
-            / \              / \  
-           x   T3   =>      T1  y  
-          / \                  / \  
-        T1  T2               T2  T3  
-   */  
+    // Passo 1: Armazene o filho esquerdo de 'y' em uma variável temporária 'x'.
+    NO* x = y->esq;
+    // Passo 2: Transfira a subárvore direita de 'x' para a subárvore esquerda de 'y'.
+    NO* T2 = x->dir;
 
-   // Passo 1: Armazene o filho esquerdo de 'y' em uma variável temporária 'x'.  
-   // Passo 2: Transfira a subárvore direita de 'x' para a subárvore esquerda de 'y'.  
-   // Passo 3: Atualize 'x' para ser o novo nó raiz da subárvore.  
-   // Passo 4: Recalcule as alturas dos nós afetados.  
-   // Passo 5: Retorne o novo nó raiz ('x').  
+    x->dir = y;
+    y->esq = T2;
 
-	// provisoriamente retorna o ponteiro passado como parâmetro
-	return y; 
+    // Passo 4: Recalcule as alturas dos nós afetados.
+    y->altura = 1 + maior(alturaNo(y->esq), alturaNo(y->dir));
+    x->altura = 1 + maior(alturaNo(x->esq), alturaNo(x->dir));
+
+    // Passo 5: Retorne o novo nó raiz ('x').
+    return x;
 }  
 
 NO* girarEsquerda(NO* x) {  
+
+	NO* y = x->dir;
+    NO* T2 = y->esq;
+    y->esq = x;
+    x->dir = T2;
+    x->altura = 1 + maior(alturaNo(x->esq), alturaNo(x->dir));
+    y->altura = 1 + maior(alturaNo(y->esq), alturaNo(y->dir));
+	return y;
    /* Rotação simples à esquerda  
            x                    y  
           / \                  / \  
